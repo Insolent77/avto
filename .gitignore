@@ -1,0 +1,7 @@
+data/
+outputs/
+.env
+node_modules/
+
+.openai/
+README-GITHUB.md

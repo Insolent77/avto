@@ -1,0 +1,3 @@
+import {DatabaseSync} from 'node:sqlite';import {resolve,dirname} from 'node:path';import {mkdirSync} from 'node:fs';
+const source=process.env.DB_PATH||resolve('data/bookings.sqlite'),target=resolve(process.argv[2]||'data/backup-'+new Date().toISOString().replace(/[:.]/g,'-')+'.sqlite');mkdirSync(dirname(target),{recursive:true});
+const db=new DatabaseSync(source);db.prepare('VACUUM INTO ?').run(target);db.close();const check=new DatabaseSync(target,{readOnly:true});if(check.prepare('PRAGMA integrity_check').get().integrity_check!=='ok')throw new Error('Backup integrity failed');check.close();console.log('Backup verified: '+target);
